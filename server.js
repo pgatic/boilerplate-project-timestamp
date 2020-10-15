@@ -37,8 +37,6 @@ app.get("/api/timestamp/:date_string", function (req, res) {
   if (/\d{5,}/.test(dateString)) {
     dateInt = parseInt(dateString);
     res.json({ unix: dateString, utc: new Date(dateInt).toUTCString() });
-  } else if (/\d{1,}/.test(dateString)) {
-    res.json({ error: "Invaid Date" });
   }
 
   // handling date strings compliant with ISO-8601 e.g. 2015-12-25
