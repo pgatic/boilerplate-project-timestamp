@@ -26,7 +26,7 @@ app.get("/api/hello", function (req, res) {
 
 
 // /api/timestamp/:date_string endpoint
-app.get("/api/timestamp/:date_string", function (req, res) {
+app.get("/api/timestamp/:date_string?", function (req, res) {
   var timestamp;
   if (req.params.date_string == null) {
     timestamp = new Date();
