@@ -24,29 +24,25 @@ app.get("/api/hello", function (req, res) {
   res.json({ greeting: 'hello API' });
 });
 
-// /api/timestamp endpoint
-app.get("/api/timestamp", function (req, res) {
-  res.json({ unix: Date.now(), utc: Date() });
-});
 
 // /api/timestamp/:date_string endpoint
 app.get("/api/timestamp/:date_string", function (req, res) {
-  var dateString = req.params.date_string;
-
-  // handling timestamps e.g. 1451001600000
-  if (/\d{5,}/.test(dateString)) {
-    dateInt = parseInt(dateString);
-    res.json({ unix: dateString, utc: new Date(dateInt).toUTCString() });
-  }
-
-  // handling date strings compliant with ISO-8601 e.g. 2015-12-25
-  var dateObject = new Date(dateString);
-
-  if (dateObject.toString() === "Invalid Date") {
-    res.json({ error: "Invaid Date" });
+  var timestamp;
+  if (req.params.date_string == null) {
+    timestamp = new Date();
+  } else if (/^[0-9]*$/g.test(req.params.date_string)) {
+    timestamp = new Date(parseInt(req.params.date_string, 10));
   } else {
-    res.json({ unix: dateObject.valueOf(), utc: dateObject.toUTCString() });
+    timestamp = new Date(req.params.date_string);
   }
+
+  var unixTime = timestamp.getTime();
+  if (Number.isNaN(unixTime)) {
+    res.json({ error: 'Invalid Date' });
+  } else {
+    res.json({ unix: unixTime, utc: timestamp.toUTCString() });
+  }
+
 });
 
 // listen for requests :)
